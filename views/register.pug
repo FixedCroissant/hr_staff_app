@@ -1,0 +1,18 @@
+extends layout
+
+block content
+        h3 Please Register for an Account
+        p Please provide your email address to create an account.
+
+        <form id="signin" name="signin" method="post" action="register">
+                <label for="email">Email Address:</label>
+                <input class="text" name="email" type="text" />
+                <br/>
+                <label for="password">Password</label>
+                <input name="password" type="password" />
+                <br/>
+                
+                <input class="btn" type="submit" value= "Register for Account" />
+        </form>
+
+        a(href='/') Go back
