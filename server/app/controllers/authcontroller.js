@@ -1,5 +1,9 @@
 var exports = module.exports = {}
- 
+//Get Models.
+var models = require("../models");
+const User = models.User;
+
+
 exports.register = function(req, res) {
     res.render('register', { title: 'Register for Account' }); 
 }
@@ -15,6 +19,16 @@ exports.login = function(req,res){
     //Return to react and let app know that the person is logged
     //return res.json({loggedIn:true});
 }
+
+
+//Find all users.
+exports.findAllUsers = function(req,res){
+    User.findAll( {attributes: ['id', 'firstname','lastname','email','createdAt','updatedAt']}).then(users => {
+            // Send all users
+            res.json(users);
+    });
+}
+
 
 exports.dashboard = function(req,res){  
     
@@ -38,13 +52,9 @@ exports.logout = function(req, res) {
     
     //express.
     req.session.destroy(function(err) {
+        
+        console.log('wanna log this person out dont you?');
         //Go to the front end.
-        //return res.redirect('http://localhost:3000/');
-    
-        res.redirect('/');
+        return res.json({loggedIn:false});
     });
-
-    //res.json({loggedOut:"true"});
-
-    //res.redirect('http://localhost:3000/');
 }
