@@ -2,6 +2,10 @@
 module.exports = (Sequelize, DataTypes) => {
   //NAME IS IMPORTANT
   const User = Sequelize.define('User', {
+    id : {
+      type: DataTypes.INTEGER,
+      primaryKey: true
+    },
     firstname: DataTypes.STRING,
     lastname: DataTypes.STRING,
     username: DataTypes.STRING,
@@ -17,6 +21,17 @@ module.exports = (Sequelize, DataTypes) => {
   }, {});
   User.associate = function(models) {
     // associations can be defined here
+
+    //Many to many with roles.
+    User.belongsToMany(models.Role,
+      {
+                                //Use our pivot table to access assignments.
+                                through: 'Role_Assigns',
+                                as:'role',                            
+                                foreignKey:'user_id'  
+                               
+                                
+      });
   };
   return User;
 };

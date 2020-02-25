@@ -1,36 +1,40 @@
-import React, { Component } from "react";
+import React from 'react'
+import { Route, Switch } from 'react-router-dom'
+import HomePage from './pages/HomePage'
+import ListPage from './pages/ListPage'
+import UserPage from './pages/UserPage';
+import  UserDetailPage from './pages/UserDetailPage';
+import HRRequestPage from './pages/HRRequestPage';
+import HRListPage from './pages/HRListPage';
+import NotFoundPage from './pages/NotFoundPage';
 
-import "./App.css";
+
+import Dashboard from './pages/Dashboard';
+import history from './history';
 
 
 
-class App extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { apiResponse: "" };
-    }
+export default function App() {
+ 
+  
+    
+  return (
 
-    callAPI() {
-        fetch("http://localhost:9000/testAPI")
-            .then(res => res.text())
-            .then(res => this.setState({ apiResponse: res }))
-            .catch(err => err);
-    }
 
-    componentDidMount() {
-        this.callAPI();
-    }
+  <div>
+              <Switch  history={history}>      
+              <Route exact path="/" component={HomePage} />
+              <Route path="/list" component={ListPage} />
 
-    render() {
-        return (
-            <div className="App">
-                <header className="App-header">
-                    <h3 className="App-title">Hi, how are you?</h3>
-                </header>
-                <p className="App-intro">{this.state.apiResponse}</p>
-            </div>
-        );
-    }
+                    {/* Protected Routes */}
+                            <Route path="/dashboard"  component={Dashboard} />
+                            <Route path="/users" component={UserPage} />
+                            <Route path="/user/:id" component={UserDetailPage} />
+                            <Route path="/hr/create" component={HRRequestPage} />
+                            <Route path="/hr/index" component={HRListPage} />
+                            <Route path="" component={NotFoundPage} />
+                        
+            </Switch>
+ </div>
+  )
 }
-
-export default App;

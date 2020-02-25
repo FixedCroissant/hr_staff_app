@@ -85,7 +85,17 @@ router.get('/test', passport.authenticate('jwt', { session: false }),
 //End example.
 
 //Get users
-router.get('/users',authController.findAllUsers)
+router.get('/users',authController.findAllUsers);
+//Get Specific user.
+router.get('/user/:id',authController.findUser);
+
+//HR REQUEST AREA
+//STORE new HR REQUEST
+router.post('/hr/store',authController.hrStoreRequest);
+//INDEX all HR REQUESTS
+router.get('/hr/index',authController.hrIndexRequest)
+
+//END HR REQUEST AREA
 
 
 

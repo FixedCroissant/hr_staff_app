@@ -20,6 +20,7 @@ app.use(bodyParser.json());
 //Use CORS
 app.use(cors());
 
+
 //For View Engine
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -43,33 +44,47 @@ var authRoute = require('./server/app/routes/auth.js')(app,passport);
 //load passport strategies, pass the models as a parameter to look through when authenticating.
 require('./server/app/config/passport/passport.js')(passport, models.User);
 
-//Add more routes.
-//Comment out, eventually will move the routes below to a separate file.
-//var indexRoutes = require('./server/app/routes/index');
-//End Routes.
-
-//Attach Routes
-//app.use(indexRoutes);
-
-
 
 
 /******
  *  ROUTES
  */
+
+//Get our API routes.
+app.use("/api", testAPIRouter);
+
+
+
+//Main file for react pages.
+//SPA
+/*app.get('*',function(req,res){
+    res.sendFile(path.join(__dirname,'client/public/','index.html'));
+});*/
+
+
+
+//All routes handled through react.
+
+//THIS IS HANDLED THROUGH PUG AND EXPRESS.
+
 //Get our INDEX routes.
 app.use('/',indexRouter);
-//Get our API routes.
-app.use("/testAPI", testAPIRouter);
+
+//login route -- testing
+/*app.post('/login', function(req, res) {
+    var email = req.body.email;
+    var password = req.body.password;
+    console.log("post received: %s %s", email, password);
+});*/
+
+
+
+
+
+
 /****
 * END ROUTES
 ********/
-
-
-
-
-
-
 
 
 

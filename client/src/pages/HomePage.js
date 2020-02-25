@@ -1,6 +1,11 @@
 import React, {Component} from 'react';
 import { Link } from "react-router-dom";
+import { withRouter } from 'react-router';
 import LoginComponent from '../components/LoginComponent';
+
+
+
+
 
 class HomePage extends Component 
 {
@@ -24,7 +29,14 @@ routeDirection(){
     if (this.state.isLoggedIn === true) {
         console.log("Person should be able to login.");
                 
-                this.props.history.push("/dashboard");
+        //Redirect to a new route.          
+        //this.props.history.push("/dashboard");
+
+        this.props.history.push({
+            pathname: '/dashboard',
+            state: { isLoggedIn:  this.state.isLoggedIn}
+        })        
+         
    }else{
         console.log("Login failed... sorry mate you cannot log in yet.");
         this.props.history.push("/")
@@ -43,4 +55,5 @@ render(){
   
 }
 
-export default HomePage;
+export default withRouter(HomePage);
+
