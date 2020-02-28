@@ -33,7 +33,7 @@ router.get("/getList", function(req, res, next) {
  * LOGIN USING JWT ADJUSTMENTS. 
  * IN CONJUNCTION WITH PASSPORTLOGIN TO CHECK OUT USER
  */
-router.get('/loginUser',(req,res,next)=> {
+router.post('/loginUser',(req,res,next)=> {
   //console.log(req.query.email + req.query.password);
 //Use passport method -- local-signin
 passport.authenticate('local-signin',(err,user,info)=>{ 
@@ -42,6 +42,12 @@ passport.authenticate('local-signin',(err,user,info)=>{
       else{
         //Login for our user.
         req.logIn(user, err => {
+          
+            //Check for any errors.
+            if (err) { console.log('There was an error logging the person in through JWT, see error'.err) }
+            else{
+
+                                //See if our user exists within the database.
                                   User.findOne({
                                                 where: {
                                                   username: user.username,
@@ -50,14 +56,42 @@ passport.authenticate('local-signin',(err,user,info)=>{
                                       
                                       .then(user => {
                                       const token = jwt.sign({ id: user.username }, jwtSecret.secret);
-                                                    res.status(200).send({
+
+                                                    //Set Cookie.
+                                                    
+                                                    //COOKIE PARSER
+                                                    //Set JWT
+                                                    res.cookie('jwt',
+                                                          token,
+                                                           {
+                                                              maxAge:3600*1000,              //1 hour expiration
+                                                              //maxAge:86400*1000,          //24 hour expiration.
+                                                              httpOnly:true                 //Not accessible to front end.
+                                                            });
+
+                                                    //Set second cookie that will be accessible to the client.
+                                                    res.cookie('logged_in',true,{
+                                                            maxAge:3600*1000
+                                                          }
+                                                          );
+                                                    //End Second cookie.        
+
+                                                    //Send Success Status.
+                                                    res.status(200).json({auth:true, message:'user found & logged in!'})
+                                              
+
+                                                    //Good for debugging and doublecehcking.            
+                                                    /*res.status(200).send({
                                                       auth: true,
                                                       token: token,
                                                       message: 'user found & logged in',
-                                                          });
-                                      });//Close then, user found.
-          })//close req.Login
+                                                          });*/
 
+                                    });//Close then, user found.
+                                      
+                  }
+
+          })//close req.Login        
         }//close else
       })(req, res, next);
     });
@@ -84,8 +118,14 @@ router.get('/test', passport.authenticate('jwt', { session: false }),
 //app.get('/api/customers', authController.findAll);
 //End example.
 
+
+const isLoggedIn = require('../middleware/isLoggedIn.js');
+
+
+
+
 //Get users
-router.get('/users',authController.findAllUsers);
+router.get('/users',isLoggedIn,authController.findAllUsers);
 //Get Specific user.
 router.get('/user/:id',authController.findUser);
 
@@ -115,6 +155,7 @@ router.post('/login', function(req, res, next) {
 
 
  //Logout Route
+ //TODO -- REMEMBER TO REMOVE SESSION COOKIES!
  router.get('/logout',authController.logout);
 
  

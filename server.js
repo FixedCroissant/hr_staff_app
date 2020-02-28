@@ -1,13 +1,20 @@
-var express = require('express');
-var app = express();
-var path = require('path');
-var passport   = require('passport');
-var session    = require('express-session');
-const bodyParser = require('body-parser');
-var flash = require('connect-flash');
+import express from 'express';
 
+let app = express();
 
-var cors = require("cors");
+import path from 'path';
+import passport from 'passport';
+import session from 'express-session';
+import bodyParser from 'body-parser';
+import flash from 'connect-flash';
+import cors from 'cors';
+import cookieParser from 'cookie-parser';
+
+//Middleware
+//Only used with the /api/users route within the testapirouter.js
+//commenting out until better organziation.
+//const isLoggedIn = require("./server/app/middleware/isLoggedIn.js");
+
 
 var indexRouter = require('./server/app/routes/index');
 var testAPIRouter = require('./server/app/routes/testapirouter');
@@ -19,6 +26,9 @@ app.use(bodyParser.json());
 
 //Use CORS
 app.use(cors());
+
+//Use Cookie Parser fro Middlware.
+app.use(cookieParser());
 
 
 //For View Engine
@@ -39,7 +49,7 @@ app.use(passport.session());
 var models = require("./server/app/models");
 
 //Routes, use Passport as a argument into the routes/auth.js file.
-var authRoute = require('./server/app/routes/auth.js')(app,passport);
+require('./server/app/routes/auth.js')(app,passport);
 
 //load passport strategies, pass the models as a parameter to look through when authenticating.
 require('./server/app/config/passport/passport.js')(passport, models.User);
@@ -51,6 +61,7 @@ require('./server/app/config/passport/passport.js')(passport, models.User);
  */
 
 //Get our API routes.
+//Must be logged in.
 app.use("/api", testAPIRouter);
 
 
@@ -70,21 +81,39 @@ app.use("/api", testAPIRouter);
 //Get our INDEX routes.
 app.use('/',indexRouter);
 
-//login route -- testing
-/*app.post('/login', function(req, res) {
-    var email = req.body.email;
-    var password = req.body.password;
-    console.log("post received: %s %s", email, password);
-});*/
-
-
-
-
-
 
 /****
 * END ROUTES
 ********/
+
+
+/***
+ * MIDDLEWARE
+ */
+
+//Add new custom middleware.
+
+//currently only locking down the /api/users route with this, commenting this out until
+//better organization.
+//app.use(isLoggedIn);
+
+
+
+
+
+
+//Add error handling middleware.
+app.use(function (err, req, res,next) {
+    console.error(err.stack)
+    res.status(500).send('Something broke!')
+})
+
+ /***
+  * END MIDDLEWARE
+  */
+
+
+
 
 
 

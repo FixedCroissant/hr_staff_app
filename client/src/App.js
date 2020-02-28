@@ -1,40 +1,48 @@
-import React from 'react'
-import { Route, Switch } from 'react-router-dom'
-import HomePage from './pages/HomePage'
-import ListPage from './pages/ListPage'
-import UserPage from './pages/UserPage';
-import  UserDetailPage from './pages/UserDetailPage';
-import HRRequestPage from './pages/HRRequestPage';
-import HRListPage from './pages/HRListPage';
-import NotFoundPage from './pages/NotFoundPage';
+import React from "react";
+import { Route, Switch, Redirect } from "react-router-dom";
+import HomePage from "./pages/HomePage";
+import UserPage from "./pages/UserPage";
+import UserDetailPage from "./pages/UserDetailPage";
+import HRRequestPage from "./pages/HRRequestPage";
+import HRListPage from "./pages/HRListPage";
+import UnAuthPage from './pages/unAuthorized';
+import NotFoundPage from "./pages/NotFoundPage";
+
+import Dashboard from "./pages/Dashboard";
+import history from "./history";
 
 
-import Dashboard from './pages/Dashboard';
-import history from './history';
+//Get my AuthenticatedRouter Wrapper function
+import AuthenticatedRoute from "./AuthenticatedRoute";
 
 
 
-export default function App() {
- 
-  
-    
+
+
+export default function App() {  
+
+
+
+
   return (
-
-
-  <div>
-              <Switch  history={history}>      
+    
+            <div>
+                     <Switch  history={history}>      
               <Route exact path="/" component={HomePage} />
-              <Route path="/list" component={ListPage} />
 
-                    {/* Protected Routes */}
-                            <Route path="/dashboard"  component={Dashboard} />
+           
+
+                    {/* Protected Routes */} 
+                    <AuthenticatedRoute path="/dashboard" component={Dashboard}/>  
                             <Route path="/users" component={UserPage} />
                             <Route path="/user/:id" component={UserDetailPage} />
                             <Route path="/hr/create" component={HRRequestPage} />
                             <Route path="/hr/index" component={HRListPage} />
+                    {/*END PROTECTED ROUTES*/}        
+                            <Route path="/unauth" component={UnAuthPage}/>        
                             <Route path="" component={NotFoundPage} />
                         
-            </Switch>
- </div>
-  )
+</Switch>
+            </div>
+  );
 }
