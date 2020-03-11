@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Sidebar from '../components/Sidebar';
+import FooterBasePage from "../layout/FooterBasePage";
 
 class UserDetailPage extends Component {
   // Initialize the state
@@ -65,7 +66,7 @@ class UserDetailPage extends Component {
                              })
                             
                         }
-                    
+        <FooterBasePage />              
       </div>
     );
   }

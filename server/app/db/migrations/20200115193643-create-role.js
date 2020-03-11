@@ -1,7 +1,5 @@
 'use strict';
 
-//Get our Users.
-//var Users = require('../models/User')
 
 module.exports = {
 
@@ -30,6 +28,12 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
+
+
     return queryInterface.dropTable('Roles');
+    
+    //How to handle foreign key constraints.
+    /*return queryInterface.sequelize.query('SET FOREIGN_KEY_CHECKS = 0')
+   .then(() => queryInterface.dropTable('Roles'));*/
   }
 };

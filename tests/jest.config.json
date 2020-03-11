@@ -1,0 +1,11 @@
+{
+   
+    
+    
+    "roots": ["../"],
+    
+  
+    "collectCoverageFrom": ["src/**/*.ts"],
+    "coverageDirectory":"../coverage",
+    "setupFilesAfterEnv": ["./suiteSetup.js"]
+}

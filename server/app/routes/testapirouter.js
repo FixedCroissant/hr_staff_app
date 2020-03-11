@@ -38,7 +38,9 @@ router.post('/loginUser',(req,res,next)=> {
 //Use passport method -- local-signin
 passport.authenticate('local-signin',(err,user,info)=>{ 
      if(err){console.log(err)}
-      if(info!=undefined){console.log(info.message); res.send(info.message)}
+      //This is sending the message back, if its a bad password, or if the email address doesn't exist, etc.
+      //TODO - Fix to show the front end properly.
+      if(info!=undefined){console.log(info.message); res.json({auth:false, message:info.message})}
       else{
         //Login for our user.
         req.logIn(user, err => {
@@ -133,7 +135,12 @@ router.get('/user/:id',authController.findUser);
 //STORE new HR REQUEST
 router.post('/hr/store',authController.hrStoreRequest);
 //INDEX all HR REQUESTS
-router.get('/hr/index',authController.hrIndexRequest)
+router.get('/hr/index',authController.hrIndexRequest);
+//GET A Specific request.
+router.get('/hr/:id',authController.hrShowRequest);
+//UPDATE A specific request
+router.put('/hr/:id',authController.HRUpdateRequest);
+
 
 //END HR REQUEST AREA
 

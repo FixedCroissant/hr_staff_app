@@ -4,6 +4,11 @@ var sequelize = require("sequelize");
 //Get Models.
 var models = require("../models");
 const User = models.User;
+const HRRequest = models.hrrequest;
+
+//Create a email setup using nodemodemailer.
+import nodemailer from 'nodemailer';
+
 
 
 
@@ -50,7 +55,7 @@ exports.findUser = function(req,res){
             }
         })
         .then(singleUser=>{
-                res.json(singleUser);
+                res.json(singleUser)                
         });
 }
 
@@ -83,8 +88,13 @@ exports.hrStoreRequest=  async function(req,res){
         console.error('Whoops! there was an error saving to the database.');
     })
 
+    //Send email, declared further down the file.
+    exports.sendBasicMessage();    
+    //End sending email.
+
+
     //Send information back.
-    return res.json({saveHrRequest: req.body});
+    //return res.json({saveHrRequest: req.body});
 }
 
 
@@ -100,34 +110,69 @@ exports.hrIndexRequest = function(req,res){
                                     ['createdAt', 'ASC'],
                             ],
                             //Select  specific fields.
-                            attributes: ['createdAt','updatedAt','requesting_department','cabinet_member','effective_date','requestor_firstname', 'requestor_lastname']
+                            attributes: ['id','createdAt','updatedAt','requesting_department','cabinet_member','effective_date','requestor_firstname', 'requestor_lastname']
                         })
     
     //Pulled information now send databack.
-    .then(        
-           //Send information back.                                
-           myresults=>res.json({myresults})
+    .then(myresults=>{
+            //Send information back.                                
+           //myresults=>res.status(201).json({myresults})
+           res.status(201).json(myresults)
+        }      
     ); 
+}
+
+//Get HR item details.
+exports.hrShowRequest = function(req,res){
+//Possible switch to findbyPK.
+HRRequest.findOne({
+    attributes:['id','requestor_firstname','requestor_lastname','cabinet_member','requesting_department'],
+    where:{
+        id: req.params.id
+    }
+})
+.then(singleHRRequest=>
+        res.json(singleHRRequest)
+);
+}
+
+//Update HR Request.
+exports.HRUpdateRequest =  async function(req,res){
+    try{
+                const myItemToUpdate = await HRRequest.findByPk(req.params.id);
+                myItemToUpdate.update(
+                    {
+                        requestor_lastname:req.body.requestor_lastname,
+                        requestor_firstname:req.body.requestor_firstname,
+                        requesting_department:req.body.requesting_department
+                    }
+                ).then(result=>{
+                    return res.status(200).send({message:"Successful update of records."})
+                        }
+                    
+                       )
+    }
+    catch(error){
+                return res.send({error:"CANNOT UPDATE RECORD: There is nothing found for HR Record Number:"+req.params.id})
+                //Error handling
+                //return console.log("There was an error finding this record." +"There is nothing found for HR Record Number:" + req.params.id );
+    }
+
+
+    //res.json(myItemToUpdate)
+
+  //  return console.log(myItemToUpdate)
+
 }
 
 
 
 //Go to dashboard.
 exports.dashboard = function(req,res){  
-    
     return console.log('testing.... going to the dashboard?');
     //res.json({login: true});
 
-    //go to react page
-    res.redirect('http://localhost:3000/dashboard');
-    
-    //return console.log("youre logged in yay!");
-    /*res.render('dashboard',
-    {
-        title:'Yay, you\'re signed in!'
-    });*/
 }
-
 
 
 //Logout route -- destory the users session.
@@ -140,4 +185,33 @@ exports.logout = function(req, res) {
         //Go to the front end.
         return res.json({loggedIn:false});
     });
+}
+
+//Send basic generic message.
+exports.sendBasicMessage = function(req,res){
+    //Setup email message.
+    let transporter = nodemailer.createTransport({
+        host: "smtp.test.io",
+        port: 2525,
+        auth: {
+          user: "XXXX",
+          pass: "XXXX"
+        }
+      });
+
+      let mailOptions = {
+        from: '"A Fake EMail Address" <fake@example.com>', 
+        to: "fake@example.com", 
+        subject: "HR Staff Application - New Submission", 
+        html: "<body><p>This is a test and only a test of the NodeMailer system sent through NodeJS. <br/>\
+         This is a another line right here. </br> And another line right here.</p></body>" 
+      };
+      //Send message.
+      transporter.sendMail(mailOptions, function(error, info) {
+                if (error) {
+                    return console.log(error);
+                }
+                console.log("Message sent: " + info.response);
+        });      
+      //End send message.
 }

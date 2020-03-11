@@ -23,6 +23,8 @@ module.exports = {
                 //This is the column name of the referenced model.
                 key:'id'
             },
+            onUpdate:'cascade',
+            onDelete:'cascade'
       },
       //Foreign key for roles.
       role_id:{
@@ -33,6 +35,8 @@ module.exports = {
                 //This is the column name of the referenced model.
                 key:'id'
             },
+            onUpdate:'cascade',
+            onDelete:'cascade'
       },
       createdAt: {
         allowNull: false,
@@ -45,6 +49,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Roles_Assigns');
+    return queryInterface.dropTable('Role_Assigns');
   }
 };

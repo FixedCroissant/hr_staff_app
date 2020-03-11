@@ -1,42 +1,59 @@
-import React, {Component} from 'react';
+import React from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 
 
-class LoginComponent extends Component {
 
-  constructor(props) {
-    super(props);
-    //this.state  = this.props.isLoggedInItem;
 
-    this.state = {
-        email: "",
-        password:"",
-        error:""
-    };
+const useStyles = makeStyles(theme => ({
 
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }  
+  ncsubutton:{
+      background:'#990000'
+  },
+  paper: {
+      marginTop: theme.spacing(8),
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+    },
+    avatar: {
+      margin: theme.spacing(1),
+      backgroundColor: theme.palette.secondary.main,
+    },
+    form: {
+      width: '100%', 
+      marginTop: theme.spacing(1),
+    },
+    submit: {
+      margin: theme.spacing(3, 0, 2),
+    },
+}));
 
-  handleSubmit(event) {
-    event.preventDefault();
+
+export default function LoginComponent ({onLoginChange}) {  
+  const [email,setEmail] = React.useState("");
+  const [password,setPassword] = React.useState("");
+  const [error,setError] = React.useState("");
+  
+ const handleEMail = (event) => setEmail(event.target.value);
+ const handlePassword = (event) => setPassword(event.target.value);
+
+   const handleSubmit = (event)=>{
     
-    let myemail = this.state.email;
-    let mypassword = this.state.password;
-
-    //return console.log(email + password)
+    event.preventDefault();   
+    let myemail = email;
+    let mypassword = password;
 
     
-    fetch('http://localhost:9000/api/login', {
+    fetch('http://localhost:9000/api/loginUser', {
       method: 'POST',
       headers : { 
             'Content-Type': 'application/json',
             'Accept': 'application/json, text/plain,',
       },
-      body: JSON.stringify({email: myemail, password:  mypassword}),
-      
+      body: JSON.stringify({email: myemail, password:  mypassword}),      
 
     })
     //any errors.
@@ -44,57 +61,47 @@ class LoginComponent extends Component {
     //Get information back
     .then((jsonData)=>{        
 
-        //Check for any errors returned.
-        if(jsonData.error){
-            
-            //Debug information...
-            //console.log("here are my errors" + jsonData.error)
-            //Set item in the template.
-            this.setState({error: jsonData.error});
+                          //Check for any errors returned.
+                          if(jsonData.error){                              
+                              //Debug information...
+                              console.log("here are my login errors: " + jsonData.error)
+                              //Set item in the template.
+                              
+                              //TODO THIS NEEDS TO BE FIXED FOR A FUNCTIONAL COMPONENT.
+                              //this.setState({error: jsonData.error});
+                              //console.log(jsonData.message);  
+                              setError(jsonData.message);
         }
 
-        //Check if any error happens.
-        return console.log(jsonData);
-
-        //Check if should be logged in
-        //return console.log(jsonData.loggedIn);
-        //this.setState({loggedIn:jsonData.loggedIn});
-        //this.props.onLoginChange(jsonData.loggedIn);
+        //Check for any login authentication error messages.
+        setError(jsonData.message);
+     
+        //Call our parent function that is called down.
+        onLoginChange(jsonData.auth);
+      
       }).catch(err => {
               console.log(err);
       });
-  }
+   }
 
- 
- handleChange = (e) => {
-    this.setState({
-        [e.target.name]: e.target.value
-    })
-}
-
-  render() {
-
-          return (
+  const classes = useStyles();
+  
+  return (
                               <Container component="main" maxWidth="xs">
                                             <div >
                                                 {/* ERROR MESSAGE                                            */}
-                                                    <div>{this.state.error}</div>
-                                                    <form id="login" name="login" onSubmit={(e) => {this.handleSubmit(e)}} >
-                                                            <label>Email Address:</label>
-                                                            <input type="email" value={this.state.email} name="email" onChange={e => this.handleChange(e)} ></input>
+                                                    <div>{error}</div> 
+                                                    <form id="login" name="login" onSubmit={(e) => {handleSubmit(e)}} >
+
+
+                                                    {/* onChange={e => this.handleChange(e)}  */}
+
+                                                            <TextField margin= "normal"   value = {email} name="email" onChange={e=>handleEMail(e)}  required id="standard-basic" label="EMail Address" /> <br/>
+                                                            <TextField margin= "normal"   value ={password} name="password" type="password"    onChange={e=>handlePassword(e)}  required id="standard-basic" label="Password"/>
                                                             <br/>
-
-
-                                                            <label>Password:</label>            
-                                                            <input type="password"  value ={this.state.password} name="password" onChange={e => this.handleChange(e)}></input>    
-
-                                                            <br/>
-                                                            <Button  type="submit">Log In</Button>
+                                                            <Button className={classes.ncsubutton} variant="contained" color="primary" type="submit">Login</Button>
                                                     </form>
                                             </div>
                               </Container>
                   );
-  }
 }
-
-export default LoginComponent;

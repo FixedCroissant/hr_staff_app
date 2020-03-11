@@ -103,6 +103,7 @@ app.use('/',indexRouter);
 
 
 //Add error handling middleware.
+//500-Error page.
 app.use(function (err, req, res,next) {
     console.error(err.stack)
     res.status(500).send('Something broke!')
@@ -117,11 +118,12 @@ app.use(function (err, req, res,next) {
 
 
 
+//TUrn off for testing.
 
  
 //Sync our Database Models
 models.sequelize.sync().then(function() { 
-    console.log('Nice! Database looks fine')
+    //console.log('Nice! Database looks fine')
  
 }).catch(function(err) { 
     console.log(err, "Something went wrong with the Database Update!")
@@ -136,3 +138,11 @@ app.listen(9000, function(err) {
     else console.log(err)
  
 });
+
+//End turn off for testing.
+
+//Export app for use with JEST Testing.
+module.exports = app;
+
+
+
