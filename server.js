@@ -10,6 +10,11 @@ import flash from 'connect-flash';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 
+//Configuation area.
+const PORT = process.env.PORT || 9000;
+const NODE_ENV = process.env.NODE_ENV || "production";
+
+
 //Middleware
 //Only used with the /api/users route within the testapirouter.js
 //commenting out until better organziation.
@@ -68,19 +73,21 @@ app.use("/api", testAPIRouter);
 
 //Main file for react pages.
 //SPA
-/*app.get('*',function(req,res){
-    res.sendFile(path.join(__dirname,'client/public/','index.html'));
-});*/
+// Serve static assets
+// serve static assets from the public folder in project root
+app.use(express.static(path.resolve(__dirname, 'client/build')));
 
+// Always return the main index.html, so react-router render the route in the client
+app.get('/*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+});
 
 
 //All routes handled through react.
 
-//THIS IS HANDLED THROUGH PUG AND EXPRESS.
-
-//Get our INDEX routes.
-app.use('/',indexRouter);
-
+//Get our INDEX routes,
+//NECCESSARY TO REGISTER A NEW USER FOR NOW.
+//app.use('/',indexRouter);
 
 /****
 * END ROUTES
@@ -127,18 +134,16 @@ models.sequelize.sync().then(function() {
  
 }).catch(function(err) { 
     console.log(err, "Something went wrong with the Database Update!")
- 
 });
  
  
 //Start up server.
 app.listen(9000, function(err) { 
     if (!err)
+        //List information about the server.
         console.log("Site is live");
-    else console.log(err)
- 
+    //else console.log(err)
 });
-
 //End turn off for testing.
 
 //Export app for use with JEST Testing.

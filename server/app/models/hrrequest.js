@@ -1,5 +1,8 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
+
+  const Version = require('sequelize-version');
+
   const hrrequest = sequelize.define('hrrequest', {
     id : {
       type: DataTypes.INTEGER,
@@ -24,5 +27,9 @@ module.exports = (sequelize, DataTypes) => {
   hrrequest.associate = function(models) {
     // associations can be defined here
   };
+  
+  //Use Version....
+  const HRRequestVersion = new Version(hrrequest);
+
   return hrrequest;
 };
