@@ -138,18 +138,16 @@ models.sequelize.sync().then(function() {
  
 }).catch(function(err) { 
     console.log(err, "Something went wrong with the Database Update!")
- 
 });
  
  
 //Start up server.
 app.listen(9000, function(err) { 
     if (!err)
+        //List information about the server.
         console.log("Site is live");
-    else console.log(err)
- 
+    //else console.log(err)
 });
-
 //End turn off for testing.
 
 //Export app for use with JEST Testing.

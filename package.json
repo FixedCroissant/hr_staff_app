@@ -30,8 +30,9 @@
     "pug": "^2.0.4",
     "react-toastify": "^5.5.0",
     "regenerator-runtime": "^0.13.3",
-    "sequelize": "^5.21.3",
-    "sequelize-cli": "^5.5.1"
+    "sequelize": "^5.21.5",
+    "sequelize-cli": "^5.5.1",
+    "sequelize-version": "0.0.58"
   },
   "devDependencies": {
     "@babel/cli": "^7.14.8",

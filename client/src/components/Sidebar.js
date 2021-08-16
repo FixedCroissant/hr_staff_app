@@ -112,14 +112,15 @@ export default function Sidebar(props)
 
   /*Go to the user list. */
   const handleUserClick=()=>{
-                    
-          //For debugging.          
-          //console.log(routeProps.myProps.props.history);          
-          //console.log(props.props.history);
-          
           //Go to the user list page.
           //routeProps.myProps.props.history.push("/users");
            props.props.history.push("/users");
+  }
+
+  /*Go to the role list page*/
+  const handleRoleClick=()=>{
+          //Go to the role list page.
+          props.props.history.push("/roles");
   }
 
   /*Go to dashboard.*/
@@ -230,12 +231,22 @@ const handleLogout = ()=>{
                                     <ListItemText primary="Users"></ListItemText> 
                                   </ListItem>
                                   
-                                  <ListItem button> 
+                                  <ListItem button onClick={(e)=>handleRoleClick(e)}> 
                                     <ListItemIcon>
                                       <AssignmentIndIcon/>
                                     </ListItemIcon>
                                     <ListItemText primary="Roles"></ListItemText> 
                                   </ListItem>
+
+                                  <ListItem button>
+                                    <ListItemIcon>
+                                      <AssignmentIcon/>  
+                                    </ListItemIcon> 
+                                    <ListItemText primary="Revisions"></ListItemText> 
+                                  </ListItem>
+ 
+
+
 
                                   <ListItem button onClick={handleClick}>
                                     <ListItemIcon>

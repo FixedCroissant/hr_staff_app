@@ -11,15 +11,20 @@ module.exports = function(passport, user) {
     var LocalStrategy = require('passport-local').Strategy; 
 
 //Tell Passport which strategy to use when logging in.
+//Register for a new account if they don't have one already.
 passport.use('local-signup', new LocalStrategy(
  
     { 
         usernameField: 'email',
         passwordField: 'password',
-        session: false        
+        session: false,
+        passReqToCallback: true        
     },
-    (usernameField,passwordField,done) => {
+    (req, usernameField, passwordField, done) => {
         try{
+           //From params; not from the body.
+            let firstNameField = req.body.firstname;
+            let lastNameField = req.body.lastname;           
                                     User.findOne({
                                                     where: {
                                                         email: usernameField               //It can find the models just not this, 
@@ -40,9 +45,9 @@ passport.use('local-signup', new LocalStrategy(
                                                         bcrypt.hash(passwordField,BCRYPT_SALT_ROUNDS)
                                                                     //Do something with my password, like create a new user.
                                                                     .then(hashedPassword=>{
-                                                                                User.create({email:usernameField, password:hashedPassword})
+                                                                                User.create({firstname: firstNameField, lastname: lastNameField, email:usernameField, password:hashedPassword})
                                                                                 .then(user=>{
-                                                                                    console.log('New user created')
+                                                                                    console.log('New user created');
                                                                                     return done(null,user);
                                                                                 });
                                                                     })

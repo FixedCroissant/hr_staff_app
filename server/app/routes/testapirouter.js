@@ -126,10 +126,14 @@ const isLoggedIn = require('../middleware/isLoggedIn.js');
 
 
 
-//Get users
+//Get users (with middleware)
 router.get('/users',isLoggedIn,authController.findAllUsers);
 //Get Specific user.
 router.get('/user/:id',authController.findUser);
+
+//Get Roles
+router.get('/roles',authController.findAllRoles);
+
 
 //HR REQUEST AREA
 //STORE new HR REQUEST
@@ -140,8 +144,6 @@ router.get('/hr/index',authController.hrIndexRequest);
 router.get('/hr/:id',authController.hrShowRequest);
 //UPDATE A specific request
 router.put('/hr/:id',authController.HRUpdateRequest);
-
-
 //END HR REQUEST AREA
 
 
@@ -149,6 +151,20 @@ router.put('/hr/:id',authController.HRUpdateRequest);
 //use custom call back.
 router.post('/login', function(req, res, next) {
     passport.authenticate('local-signin', function(err, user, info) {
+      if (err) { return next(err); }
+      //no user found.
+      if (!user) { return res.json({error:info.message})}   //the information coming back is in the message key. 
+      req.logIn(user, function(err) {
+        if (err) { return next(err); }
+        //Succcessful, let react know that using our loggedIn key.
+        return res.json({loggedIn:true});
+      });
+    })(req, res, next);
+  });
+
+  //Register for account.
+  router.post('/register', function(req, res, next) {
+    passport.authenticate('local-signup', function(err, user, info) {
       if (err) { return next(err); }
       //no user found.
       if (!user) { return res.json({error:info.message})}   //the information coming back is in the message key. 

@@ -4,6 +4,7 @@ var sequelize = require("sequelize");
 //Get Models.
 var models = require("../models");
 const User = models.User;
+const Role = models.Role;
 const HRRequest = models.hrrequest;
 
 //Create a email setup using nodemodemailer.
@@ -165,6 +166,16 @@ exports.HRUpdateRequest =  async function(req,res){
 
 }
 
+//See current roles.
+exports.findAllRoles = function(req,res){
+    Role.findAll({
+        attributes: ['id','rolename']
+    }) 
+    .then(        
+        r=>res.json(r)
+    );
+}
+
 
 
 //Go to dashboard.
@@ -190,6 +201,11 @@ exports.logout = function(req, res) {
     req.session.destroy(function(err) {
         
         console.log('wanna log this person out dont you?');
+
+        //Remove our cookies.  
+        res.clearCookie('logged_in');
+        res.clearCookie('jwt');
+        
         //Go to the front end.
         return res.json({loggedIn:false});
     });
