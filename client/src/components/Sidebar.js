@@ -145,14 +145,25 @@ export default function Sidebar(props)
 
 
 
-  //const handleLogout = (data)=>{axios.get('http://localhost:9000/api/logout',data)}
+  const handleLogout2 = (data)=>{
+    axios.get('http://localhost:9000/api/logout')
+      .then(response=>{
+          //console.log(response.data.loggedIn)
+          if (response.data.isLoggedIn){console.log("person is still logged in.")}
+          else {
+            console.log("we need to log this person out.")
+              //Need to redirect, the cookie should be removed from Express Already.
+              props.props.history.push("/");
+            }
+      })
+  }
 
   //Similar to componentDidMount and componentDidUpdate:
   useEffect(() => { 
 
     
 // Pass in a callback function!
-handleLogout = ()=>{
+const handleLogout = ()=>{
           
           //axios.get('http://localhost:9000/api/logout')
         
@@ -186,7 +197,7 @@ handleLogout = ()=>{
                                                         <Typography variant="h6" className={classes.title}>
                                                                 HR FUN STUFF.
                                                         </Typography>
-                                                        <Button className={classes.button} variant="contained" onClick={() => handleLogout()}>
+                                                        <Button className={classes.button} variant="contained" onClick={() => handleLogout2()}>
                                                           Logout
                                                         </Button>                                                            
                                               </Toolbar>

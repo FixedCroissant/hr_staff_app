@@ -53,6 +53,8 @@ export default function LoginComponent ({onLoginChange}) {
             'Content-Type': 'application/json',
             'Accept': 'application/json, text/plain,',
       },
+      //Don't forget to specify this if you need cookies.
+      credentials:'include',
       body: JSON.stringify({email: myemail, password:  mypassword}),      
 
     })
@@ -100,6 +102,7 @@ export default function LoginComponent ({onLoginChange}) {
                                                             <TextField margin= "normal"   value ={password} name="password" type="password"    onChange={e=>handlePassword(e)}  required id="standard-basic" label="Password"/>
                                                             <br/>
                                                             <Button className={classes.ncsubutton} variant="contained" color="primary" type="submit">Login</Button>
+                                                            
                                                     </form>
                                             </div>
                               </Container>

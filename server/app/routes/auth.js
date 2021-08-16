@@ -13,21 +13,17 @@ module.exports = function(app,passport)
 
     //Head to Dashboard
     //Call middleware function (below)
-    app.get('/dashboard',isLoggedIn, authController.dashboard);
+   app.get('/dashboard',isLoggedIn, authController.dashboard);
 
     
-    //Logout Route
-    app.get('/logout',authController.logout);
-
-    //Login
+   
+    //Login -- only api is accessible through react. 
     app.post('/login', passport.authenticate('local-signin', {
         successRedirect: '/dashboard', 
         failureRedirect: '/login',
         failureFlash : true
-    
         })
     );
-
 
     //Post Route on Registration
     app.post('/register', passport.authenticate('local-signup', {
@@ -37,6 +33,7 @@ module.exports = function(app,passport)
     
     
     //Protect our dashboard route, and go to login page.
+    //NEED TO USE WITH REACT AS WELL.
     function isLoggedIn(req, res, next) { 
         if (req.isAuthenticated())
          

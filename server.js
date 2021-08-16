@@ -10,14 +10,13 @@ import flash from 'connect-flash';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 
-//Middleware
-//Only used with the /api/users route within the testapirouter.js
-//commenting out until better organziation.
-//const isLoggedIn = require("./server/app/middleware/isLoggedIn.js");
+//Configuation area.
+const PORT = process.env.PORT || 9000;
+const NODE_ENV = process.env.NODE_ENV || "production"; 
 
+//CORS options.
+const corsOptions = {origin: 'http://localhost:3000',credentials:true}
 
-var indexRouter = require('./server/app/routes/index');
-var testAPIRouter = require('./server/app/routes/testapirouter');
 
 
 //For BodyParser
@@ -25,16 +24,27 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 //Use CORS
-app.use(cors());
+app.use(cors(corsOptions));
 
-//Use Cookie Parser fro Middlware.
+//Use Cookie Parser for Middlware.
 app.use(cookieParser());
 
 
+//Middleware
+//Only used with the /api/users route within the testapirouter.js
+//commenting out until better organziation.
+//const isLoggedIn = require("./server/app/middleware/isLoggedIn.js");
+
+//Not being used.
+//var indexRouter = require('./server/app/routes/index');
+var testAPIRouter = require('./server/app/routes/testapirouter');
+
+
+//ToDo -- Remove, not used.
 //For View Engine
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug')
+//app.set('views', path.join(__dirname, 'views'));
+//app.set('view engine', 'pug')
 
 // For Passport  and Sessions
 app.use(session({ secret: 'everythingisawesome',resave: true, saveUninitialized:true}));
@@ -68,19 +78,20 @@ app.use("/api", testAPIRouter);
 
 //Main file for react pages.
 //SPA
-/*app.get('*',function(req,res){
-    res.sendFile(path.join(__dirname,'client/public/','index.html'));
-});*/
+// Serve static assets
+// serve static assets from the public folder in project root
+app.use(express.static(path.resolve(__dirname, 'client/build')));
 
+// Always return the main index.html, so react-router render the route in the client
+app.get('/*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+});
 
 
 //All routes handled through react.
 
-//THIS IS HANDLED THROUGH PUG AND EXPRESS.
-
 //Get our INDEX routes.
-app.use('/',indexRouter);
-
+//app.use('/',indexRouter);
 
 /****
 * END ROUTES

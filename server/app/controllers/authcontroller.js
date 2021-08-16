@@ -169,14 +169,22 @@ exports.HRUpdateRequest =  async function(req,res){
 
 //Go to dashboard.
 exports.dashboard = function(req,res){  
-    return console.log('testing.... going to the dashboard?');
-    //res.json({login: true});
+    //return console.log('testing.... going to the dashboard?');
+    res.json({login: true});
 
 }
 
 
 //Logout route -- destory the users session.
 exports.logout = function(req, res) {
+
+    //Remember to clear the cookie.
+
+    //Goback to the homepage.
+    /*this.props.history.push({
+        pathname: "/dashboard",
+        state: { isLoggedIn: this.state.isLoggedIn }
+      });*/
     
     //express.
     req.session.destroy(function(err) {
