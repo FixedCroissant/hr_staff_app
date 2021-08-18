@@ -31,10 +31,10 @@ export default function App() {
             <div>
                 <ToastContainer />
                     <Switch  history={history}>      
-              <Route exact path="/" component={HomePage} />           
+              <Route exact path="/" component={HomePage} /> 
+              <Route path="/register" component={RegisterPage}/>          
 
                     {/* Protected Routes */} 
-                            <Route path="/register" component={RegisterPage}/>
                             <AuthenticatedRoute path="/dashboard" component={Dashboard} />
                             <AuthenticatedRoute path="/users" component={UserPage} />
                             <AuthenticatedRoute path="/user/:id" component={UserDetailPage} />
