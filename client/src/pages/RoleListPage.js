@@ -20,7 +20,7 @@ class RoleListPage extends Component {
 
   // Retrieves the list of roles from the Express app
   getRoleList = () => {
-    fetch("http://localhost:9000/api/roles", {})
+    fetch(process.env.REACT_APP_API_URL+"/api/roles", {})
       .then(res => res.json())
       .then(roleList => this.setState({ roleList }))
       //Catch any error.

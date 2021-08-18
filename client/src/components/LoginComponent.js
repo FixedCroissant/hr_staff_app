@@ -48,7 +48,7 @@ export default function LoginComponent ({onLoginChange}) {
     let mypassword = password;
 
     
-    fetch('http://localhost:9000/api/loginUser', {
+    fetch(process.env.REACT_APP_API_URL+`/api/loginUser`, {
       method: 'POST',
       headers : { 
             'Content-Type': 'application/json',

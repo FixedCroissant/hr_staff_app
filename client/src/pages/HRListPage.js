@@ -134,7 +134,7 @@ export default function CustomPaginationActionsTable(props) {
   //Get HR Requests...
   // Retrieves the list of items from the Express app
   const getHRList = () => {    
-    fetch('http://localhost:9000/api/hr/index',{credentials:'include'})
+    fetch(process.env.REACT_APP_API_URL+'/api/hr/index',{credentials:'include'})
     .then(res => res.json())
     .then(hrRequests=> setItems(hrRequests));   
   } 

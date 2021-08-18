@@ -105,7 +105,7 @@ this.state = {
             console.log(values);
 
             //Upload information to our server:
-            fetch('http://localhost:9000/api/hr/store',
+            fetch(process.env.REACT_APP_API_URL+'/api/hr/store',
             {
             method:'POST',
             headers: {

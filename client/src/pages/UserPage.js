@@ -20,7 +20,7 @@ class UserPage extends Component {
 
   // Retrieves the list of items from the Express app
   getUserList = () => {
-    fetch("http://localhost:9000/api/users", {credentials:'include'})
+    fetch(process.env.REACT_APP_API_URL+"/api/users", {credentials:'include'})
       .then(res => res.json())
       .then(userList => this.setState({ userList }))
       //Catch any error.

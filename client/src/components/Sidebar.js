@@ -147,7 +147,7 @@ export default function Sidebar(props)
 
 
   const handleLogout2 = (data)=>{
-    axios.get('http://localhost:9000/api/logout')
+    axios.get(process.env.REACT_APP_API_URL+`/api/logout`)
       .then(response=>{
           //console.log(response.data.loggedIn)
           if (response.data.isLoggedIn){console.log("person is still logged in.")}
@@ -166,8 +166,6 @@ export default function Sidebar(props)
 // Pass in a callback function!
 const handleLogout = ()=>{
           
-          //axios.get('http://localhost:9000/api/logout')
-        
         //console.log(props.props.location.state.isLoggedIn);
         //TODO FIX THIS.
          console.log(props.props.history.location.state.isLoggedIn);
@@ -176,7 +174,7 @@ const handleLogout = ()=>{
        //Adjust logged in flag.
        //this.setState({isLoggedIn:false});
 
-        axios.get('http://localhost:9000/api/logout');        
+        axios.get(process.env.REACT_APP_API_URL+'/api/logout');        
     }
     
     

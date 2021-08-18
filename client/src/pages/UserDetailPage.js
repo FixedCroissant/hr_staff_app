@@ -22,7 +22,7 @@ class UserDetailPage extends Component {
 
   // Retrieves the list of items from the Express app
   getUserList = () => {
-    fetch('http://localhost:9000/api/user/'+this.state.userID,
+    fetch(process.env.REACT_APP_API_URL+'/api/user/'+this.state.userID,
     {
       method:'GET',
       headers: {

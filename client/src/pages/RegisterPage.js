@@ -59,7 +59,7 @@ class RegisterPage extends Component {
             console.log(values); 
 
             //Upload information to our server:
-            fetch('http://localhost:9000/api/register',
+            fetch(process.env.REACT_APP_API_URL + `/api/register`,
                     {
                     method:'POST',
                     headers: {

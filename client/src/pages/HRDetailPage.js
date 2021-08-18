@@ -26,7 +26,7 @@ class HRDetailPage extends Component {
 
   // Retrieves the list of items from the Express app
   getHRList = () => {
-    fetch("http://localhost:9000/api/hr/" + this.state.hrID, {
+    fetch(process.env.REACT_APP_API_URL+"/api/hr/" + this.state.hrID, {
       method: "GET",
       headers: {
         "Content-Type": "application/json"
@@ -71,7 +71,7 @@ class HRDetailPage extends Component {
               //console.log("You are updating the following information to the server:");
               //console.log(values);
               //Upload information to our server:
-              fetch("http://localhost:9000/api/hr/" + values.id, {
+              fetch(process.env.REACT_APP_API_URL + `/api/hr/` + values.id, {
                 method: "PUT",
                 headers: {
                   "Content-Type": "application/json"
