@@ -2,6 +2,7 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
+import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 
 
@@ -101,7 +102,18 @@ export default function LoginComponent ({onLoginChange}) {
                                                             <TextField margin= "normal"   value = {email} name="email" onChange={e=>handleEMail(e)}  required id="standard-basic" label="EMail Address" /> <br/>
                                                             <TextField margin= "normal"   value ={password} name="password" type="password"    onChange={e=>handlePassword(e)}  required id="standard-basic" label="Password"/>
                                                             <br/>
-                                                            <Button className={classes.ncsubutton} variant="contained" color="primary" type="submit">Login</Button>
+
+
+                                                            <Grid container spacing={6}>
+                                                              <Grid item xs ={4}>
+                                                              <Button className={classes.ncsubutton} margin="" variant="contained" color="primary" type="submit">Login</Button>
+                                                              </Grid>
+                                                              <Grid item xs ={8}>
+                                                                &nbsp;
+                                                              </Grid>
+
+                                                            </Grid>
+                                                            
                                                             
                                                     </form>
                                             </div>
