@@ -63,39 +63,38 @@ exports.findUser = function(req,res){
 //Save new HR request.
 exports.hrStoreRequest=  async function(req,res){
 
-    //See what information I'm passinge over.
-    //return console.log(req.body);
-
+    try{
     //Create new HR Item in the system to review.
     const newHrItem = await models.hrrequest.create({
-                                requesting_department: req.body.hrpartnername, 
-                                requestor_firstname: req.body.hrrequestorfirstname,
-                                requestor_lastname: req.body.hrrequestorlastname,
-                                cabinet_member:req.body.cabinet_member,
-                                effective_date:req.body.effective_date,
-                                employee_firstname:req.body.employee_firstname,
-                                employee_lastname:req.body.employee_lastname,
-                                employee_position_number:req.body.employee_position_number,
-                                former_employee_firstname:req.body.former_employee_firstname,
-                                former_employee_lastname:req.body.former_employee_lastname,
-                                category:req.body.category,
-                                employee_flsa:req.body.employee_flsa,
-                                request_type:req.body.request_type,
-                                purpose_of_request:req.body.purpose,
-                                employee_justification:req.body.employee_justification
-                            })
-    //Catch our errors that we may have.
-    .catch(() => {
-        console.error('Whoops! there was an error saving to the database.');
+            requesting_department: req.body.hrpartnername, 
+            requestor_firstname: req.body.hrrequestorfirstname,
+            requestor_lastname: req.body.hrrequestorlastname,
+            cabinet_member:req.body.cabinet_member,
+            effective_date:req.body.effective_date,
+            employee_firstname:req.body.employee_firstname,
+            employee_lastname:req.body.employee_lastname,
+            employee_position_number:req.body.employee_position_number,
+            former_employee_firstname:req.body.former_employee_firstname,
+            former_employee_lastname:req.body.former_employee_lastname,
+            category:req.body.category,
+            employee_flsa:req.body.employee_flsa,
+            request_type:req.body.request_type,
+            purpose_of_request:req.body.purpose,
+            employee_justification:req.body.employee_justification
     })
+    .then(result=>{
+            return res.status(200).send({message:"Successful creation of hr record."})
+        }
+        )
+    }
+     //Catch our errors that we may have.
+    catch(error){
+        return res.send({error:"CANNOT SAVE RECORD:"});
+    }
 
     //Send email, declared further down the file.
-    exports.sendBasicMessage();    
+    //exports.sendBasicMessage();    
     //End sending email.
-
-
-    //Send information back.
-    //return res.json({saveHrRequest: req.body});
 }
 
 
