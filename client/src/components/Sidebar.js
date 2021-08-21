@@ -1,8 +1,7 @@
 import React,{ useState, useEffect } from 'react';
-import Container from '@material-ui/core/Container';
+import { useHistory,useLocation } from "react-router-dom";
 import { makeStyles,useTheme } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
-import Button from '@material-ui/core/Button';
 import AppBar from '@material-ui/core/AppBar';
 import Typography from '@material-ui/core/Typography';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -28,6 +27,8 @@ import Collapse from '@material-ui/core/Collapse';
 import HomeIcon from '@material-ui/icons/Home';
 import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 import AssignmentIcon from '@material-ui/icons/Assignment';
+
+import Logout from '../components/Logout';
 
 
 
@@ -83,22 +84,30 @@ const useStyles = makeStyles(theme => ({
 
 
 
-export default function Sidebar(props) 
+export default function Sidebar() 
 {
+
+  
   
   // Declare a new state variable, which we'll call "isLoggedI"
-  //const isLoggedIn = useState("true");
+  //Get information from our history stack in the router.
+  let isLoggedIn = useLocation();
   
-  //Update our count.
-  //const [loggedIn, setCount] = useState(0);
+ 
 
+  //Get History.
+  let history = useHistory();
+
+  
+  
+  //Update our login.
+  const [login, setLogin] = useState(null);
   const [open,setOpen] = React.useState(false);
 
   const [dropdownMenuToggle, setHidden] = useState(false) //start with false to start out.
   const handleClick = () => setHidden(!dropdownMenuToggle) // complete a toggle of the value above.
 
-  let handleLogout;
-
+  
   const classes = useStyles();
   const theme = useTheme();
 
@@ -113,25 +122,27 @@ export default function Sidebar(props)
   /*Go to the user list. */
   const handleUserClick=()=>{
           //Go to the user list page.
-          //routeProps.myProps.props.history.push("/users");
-           props.props.history.push("/users");
+           history.push({
+            pathname: '/users',
+            state: {isLoggedIn:isLoggedIn},
+          });
   }
 
   /*Go to the role list page*/
   const handleRoleClick=()=>{
           //Go to the role list page.
-          props.props.history.push("/roles");
+          history.push({pathname:"/roles",state:{isLoggedIn:isLoggedIn}});
   }
 
   /*Go to dashboard.*/
   const handleAdminClick = ()=>{
-          props.props.history.push("/dashboard");
+          history.push({pathname:"/dashboard",state:{isLoggedIn:isLoggedIn}});
   }
 
   /*HR Requests*/
   //Create new request.
   const handleHRCreateClick = () =>{
-        props.props.history.push("/hr/create");
+        history.push({pathname:"/hr/create",state:{isLoggedIn:isLoggedIn}});
   }
 
   /**
@@ -140,7 +151,7 @@ export default function Sidebar(props)
    */
 
    const handleHRSeeAllClick=()=>{
-        props.props.history.push("/hr/index");
+        history.push({pathname:"/hr/index",state:{isLoggedIn:isLoggedIn}});
    }
 
 
@@ -152,53 +163,47 @@ export default function Sidebar(props)
           //console.log(response.data.loggedIn)
           if (response.data.isLoggedIn){console.log("person is still logged in.")}
           else {
-            console.log("we need to log this person out.")
               //Need to redirect, the cookie should be removed from Express Already.
-              props.props.history.push("/");
-            }
-      })
+              history.push("/");
+      }})
   }
 
   //Similar to componentDidMount and componentDidUpdate:
-  useEffect(() => { 
-
-    
-// Pass in a callback function!
-const handleLogout = ()=>{
-          
-        //console.log(props.props.location.state.isLoggedIn);
-        //TODO FIX THIS.
-         console.log(props.props.history.location.state.isLoggedIn);
-
-        //Logout
-       //Adjust logged in flag.
-       //this.setState({isLoggedIn:false});
-
-        axios.get(process.env.REACT_APP_API_URL+'/api/logout');        
+  useEffect(() => {
+    //Check our state from our router.
+    console.log(isLoggedIn);
+    //as long as its not undefined.
+    if(isLoggedIn.state !==undefined){
+      setLogin(isLoggedIn.state.isLoggedIn);
     }
     
-    
-   
-
-
   }, []);
+
+//Get our menu button  
+ const MenuButton = ()=>{
+   if(login){
+       return  <IconButton edge="start" onClick={handleDrawerOpen}  className={classes.menuButton} color="inherit" aria-label="menu">
+       <MenuIcon />
+     </IconButton>;
+   }
+   return null;
+ 
+ };
+
+
 
   return (
 
 
     
-            <div className={classes.paper}>    
+            <div className={classes.paper}>  
                             <AppBar position="static">
                                               <Toolbar className={classes.ncsuBack}>
-                                                        <IconButton edge="start" onClick={handleDrawerOpen}  className={classes.menuButton} color="inherit" aria-label="menu">
-                                                            <MenuIcon />
-                                                        </IconButton>
+                                              <MenuButton checkLogin={login}/>
                                                         <Typography variant="h6" className={classes.title}>
                                                                 HR FUN STUFF.
                                                         </Typography>
-                                                        <Button className={classes.button} variant="contained" onClick={() => handleLogout2()}>
-                                                          Logout
-                                                        </Button>                                                            
+                                                        <Logout checkLogin={login} handleLogout={()=>handleLogout2()}/>                                                               
                                               </Toolbar>
                             </AppBar>
                               <Drawer
