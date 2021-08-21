@@ -1,12 +1,14 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { withRouter } from "react-router";
 import LoginComponent from "../components/LoginComponent";
+import Sidebar from "../components/Sidebar";
+import FooterBasePage from '../layout/FooterBasePage';
 
 class HomePage extends Component {
   constructor(props) {
     super(props);
-    this.state = { isLoggedIn: false };
+    this.state = { isLoggedIn: false};
     this.handleLoginChange = this.handleLoginChange.bind(this);
     this.routeDirection = this.routeDirection.bind(this);
   }
@@ -16,6 +18,14 @@ class HomePage extends Component {
 
     //Go to the next page.
     this.routeDirection();
+  }
+
+  componentDidMount(){
+    //Set initial state from history.
+    this.props.history.push({
+      pathname: "/",
+      state: { isLoggedIn: this.state.isLoggedIn }
+    });
   }
 
   routeDirection() {
@@ -36,14 +46,11 @@ class HomePage extends Component {
   }
 
   render() {
-    //Temporary user.
-    //const user = { name: "JOSH", loggedIn: false };
-
     return (
       <div>
-          Home page yay.
-           <LoginComponent onLoginChange={this.handleLoginChange} /> 
-        
+           <Sidebar/> 
+           <LoginComponent onLoginChange={this.handleLoginChange} />
+           <FooterBasePage/>
       </div>
     );
   }
