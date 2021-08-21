@@ -4,18 +4,6 @@ var authController = require('../controllers/authcontroller.js');
 //so that it is injected here.
 module.exports = function(app,passport) 
 {
- 
-    //Get the Register Page
-    app.get('/register', authController.register);
-
-    //Show the Login PAge
-    app.get('/login', authController.login);
-
-    //Head to Dashboard
-    //Call middleware function (below)
-   app.get('/dashboard',isLoggedIn, authController.dashboard);
-
-    
    
     //Login -- only api is accessible through react. 
     app.post('/login', passport.authenticate('local-signin', {
