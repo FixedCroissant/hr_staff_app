@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Sidebar from '../components/Sidebar';
+import Button from "@material-ui/core/Button";
 
 //Not using yet.
 //import HRCreateFormComponent from '../components/HRCreateFormComponent';
@@ -9,12 +10,13 @@ import TextField from '@material-ui/core/TextField';
 
 import FooterBasePage from '../layout/FooterBasePage';
 
+
 class RegisterPage extends Component {
   // Initialize the state
   constructor(props){
     super(props);
     this.state = {        
-      newRequest: {emailaddress:'',password:''}      
+      newRequest: {firstname:'',lastname:'',email:'',password:''}      
     }
   }
 
@@ -42,14 +44,9 @@ class RegisterPage extends Component {
           const errors = {};
          
           //Show required values.
-          if(!values.hrpartnername){
-              errors.hrpartnername='Required';
-          } 
-          if(!values.hrrequestorfirstname || !values.hrrequestorlastname ){
-              errors.hrrequestorfirstname='Required';
-              errors.hrrequestorlastname='Required';
-
-          }         
+          if(!values.email){
+              errors.email='Required';
+          }        
           return errors;
         }}
 
@@ -68,7 +65,7 @@ class RegisterPage extends Component {
                     body:JSON.stringify(values)
                 })
                 .then(res=>console.log(res));
-                //.then(res => res.json());
+                
         }}
 
         //Handle changes.
@@ -135,16 +132,16 @@ class RegisterPage extends Component {
                                         label="EMail Address:"
                                         style={{ margin: 8 }}
                                         margin="normal"
-                                        name="emailaddress"
+                                        name="email"
                                         onChange={handleChange} 
                                         onBlur={handleBlur} 
-                                        value={values.emailaddress}
+                                        value={values.email}
                                         InputLabelProps={{
                                             shrink: true,
                                         }}
                             />
                             
-                            {errors.emailaddress && touched.emailaddress && errors.emailaddress} 
+                            {errors.email && touched.email && errors.email} 
 
                             <br/>
 
@@ -169,9 +166,7 @@ class RegisterPage extends Component {
                             <br/>                
                             <br/>                
                             <br/>                
-                            <button type="submit" disabled={isSubmitting}>
-                            Register for Account
-                            </button>
+                            <Button type="submit">Register for Account</Button>
           </form>
         )}
       </Formik>
