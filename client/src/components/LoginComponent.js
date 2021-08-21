@@ -4,6 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles } from '@material-ui/core/styles';
+import {useHistory} from 'react-router-dom';
 
 
 
@@ -41,7 +42,10 @@ export default function LoginComponent ({onLoginChange}) {
  const handleEMail = (event) => setEmail(event.target.value);
  const handlePassword = (event) => setPassword(event.target.value);
 
-   const handleSubmit = (event)=>{
+ const history = useHistory(); 
+ const goRegister = ()=> history.push('register');
+ 
+ const handleSubmit = (event)=>{
     
     event.preventDefault();   
     let myemail = email;
@@ -109,7 +113,7 @@ export default function LoginComponent ({onLoginChange}) {
                                                               <Button className={classes.ncsubutton} margin="" variant="contained" color="primary" type="submit">Login</Button>
                                                               </Grid>
                                                               <Grid item xs ={8}>
-                                                                &nbsp;
+                                                               <Button onClick={goRegister}>Register for Account</Button>
                                                               </Grid>
 
                                                             </Grid>
