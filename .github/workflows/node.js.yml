@@ -22,6 +22,7 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         port: ${{ secrets.SSH_PORT }}
         script: |
-          whoami
-          ls -al 
+          cd ~/hr_staff_app
+          git pull origin master
+          npm install --production
           
