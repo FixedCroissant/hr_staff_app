@@ -3,6 +3,7 @@ import express from 'express';
 let app = express();
 
 import path from 'path';
+import dotenv from 'dotenv';
 import passport from 'passport';
 import session from 'express-session';
 import bodyParser from 'body-parser';
@@ -11,11 +12,14 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 
 //Configuation area.
+const location = dotenv.config({path:path.resolve(__dirname,'./server/app/.env')});
 const PORT = process.env.PORT || 9000;
 const NODE_ENV = process.env.NODE_ENV || "production"; 
 
+
+
 //CORS options.
-const corsOptions = {origin: 'http://localhost:3000',credentials:true}
+const corsOptions = {origin: process.env.CORS_SETUP,credentials:true}
 
 
 
@@ -134,7 +138,7 @@ app.use(function (err, req, res,next) {
  
 //Sync our Database Models
 models.sequelize.sync().then(function() { 
-    //console.log('Nice! Database looks fine')
+    console.log('Nice! Database looks fine')
  
 }).catch(function(err) { 
     console.log(err, "Something went wrong with the Database Update!")
@@ -142,11 +146,12 @@ models.sequelize.sync().then(function() {
  
  
 //Start up server.
-app.listen(9000, function(err) { 
-    if (!err)
+app.listen(process.env.PORT, function(err) { 
+    //turn off console for testing as it will show up on tests.
+    /*if (!err)
         //List information about the server.
         console.log("Site is live");
-    //else console.log(err)
+    //else console.log(err)*/
 });
 //End turn off for testing.
 
