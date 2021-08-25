@@ -25,4 +25,8 @@ jobs:
           cd ~/hr_staff_app
           git pull origin master
           npm install --production
-          
+          cd ~/hr_staff_app/client/
+          npm install
+          cd ~/hr_staff_app          
+          npm run build-server
+          npm run buld-server-config     
