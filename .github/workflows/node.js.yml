@@ -23,10 +23,11 @@ jobs:
         port: ${{ secrets.SSH_PORT }}
         script: |
           cd ~/hr_staff_app
-          git pull origin master
+          git pull origin main
           npm install --production
           cd ~/hr_staff_app/client/
           npm install
+          npm run build
           cd ~/hr_staff_app          
           npm run build-server
           npm run buld-server-config     
