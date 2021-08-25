@@ -32,9 +32,7 @@ class UserPage extends Component {
 
   render() {
     const { userList } = this.state;
-    console.log(userList);
    
-
     return  this.state.requestFailed ? (
       <Redirect to="/unauth"/>
     ) : (
